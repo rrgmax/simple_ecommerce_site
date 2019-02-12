@@ -21,7 +21,7 @@ def catalog(request):
     cart = request.session['cart']
     request.session.set_expiry(0)    
     store_items = Product.objects.all()
-    ctx = {'store_items': store_items, 'cart_items': len(cart)}
+    ctx = {'store_items': store_items, 'cart_size': len(cart)}
     
     if request.method == "POST":
         cart.append(int(resquest.POST['obj_id']))
@@ -41,4 +41,4 @@ def removefromcart(request):
     obj_index = request.session['cart'].index(obj_to_remove)
     request.session['cart'].pop(obj_index)
     return redirect('cart')
-    
+
