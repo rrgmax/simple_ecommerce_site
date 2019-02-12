@@ -35,3 +35,10 @@ def cart(request):
             'total_price': priceCart(cart)}
     return render(request, "cart.html", ctx)        
 
+def removefromcart(request):
+    request.session.set_expiry(0)
+    obj_to_remove = int(request.POST['obj_id'])
+    obj_index = request.session['cart'].index(obj_to_remove)
+    request.session['cart'].pop(obj_index)
+    return redirect('cart')
+    
