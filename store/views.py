@@ -5,15 +5,15 @@ from .models import Product
 def cartItems(cart):
     items = []
     for item in cart:
-        item.append(Product.objects.get(id=item))
-    return items    
+        items.append(Product.objects.get(id=int(item)))
+    return items   
 
 def priceCart(cart):
     cart_items = cartItems(cart)
     price = 0
     for item in cart_items:
         price += item.price
-    return price    
+    return price
 
 def catalog(request):
     if 'cart' not in request.session:
@@ -24,7 +24,7 @@ def catalog(request):
     ctx = {'store_items': store_items, 'cart_size': len(cart)}
     
     if request.method == "POST":
-        cart.append(int(resquest.POST['obj_id']))
+        cart.append(int(request.POST['obj_id']))
         return redirect('catalog')
     return render (request, "catalog.html", ctx)
 
@@ -42,3 +42,8 @@ def removefromcart(request):
     request.session['cart'].pop(obj_index)
     return redirect('cart')
 
+def checkout(request):
+    cart = request.session['cart']
+    request.session.set_expiry(0)
+    ctx = {'cart':cart, 'cart_size':len(cart), 'cart_items':cartItems(cart), 'total_price': priceCart(cart)}
+    return render(request, "checkout.html", ctx)
