@@ -1,6 +1,6 @@
-from django.conf.urls import patterns, include, url
+from django.urls import path
 
-import views
+from . import views
 
 urlpatterns = [
     path('', views.catalog, name="catalog" ),
