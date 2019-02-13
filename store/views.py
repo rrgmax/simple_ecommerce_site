@@ -47,3 +47,21 @@ def checkout(request):
     request.session.set_expiry(0)
     ctx = {'cart':cart, 'cart_size':len(cart), 'cart_items':cartItems(cart), 'total_price': priceCart(cart)}
     return render(request, "checkout.html", ctx)
+
+def completeOrder(request):
+    cart = request.session['cart']
+    request.session.set_expiry(0)
+    ctx = {'cart':cart, 'cart_size':len(cart), 'cart_items':cartItems(cart), 'total_price': priceCart(cart)}
+    order = Order()
+    order.items = genItemsList(cart)
+    order.first_name = request.POST['first_name']
+    order.last_name = request.POST['last_name']
+    order.address = request.POST['address']
+    order.city = request.POST['city']
+    order.payment_data = request.POST['payment_data']
+    order.fulfilled = False
+    order.payment_method = request.POST['payment']
+    order.save()
+    request.session['cart'] = []
+    return render(request, "complete_order.html", ctx)
+    
