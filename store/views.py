@@ -70,7 +70,7 @@ def completeOrder(request):
     order.address = request.POST['address']
     order.city = request.POST['city']
     order.payment_data = request.POST['payment_data']
-    order.fulfilled = False
+    order.fullfilled = False
     order.payment_method = request.POST['payment']
     order.save()
     request.session['cart'] = []
