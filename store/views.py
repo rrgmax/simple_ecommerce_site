@@ -8,6 +8,14 @@ def cartItems(cart):
         items.append(Product.objects.get(id=int(item)))
     return items   
 
+def genItemsList(cart):
+    cart_items = cartItems(cart)
+    items_list = ""
+    for item in cart_items:
+        items_list += ","
+        items_list += item.name
+    return items_list
+
 def priceCart(cart):
     cart_items = cartItems(cart)
     price = 0
@@ -64,4 +72,24 @@ def completeOrder(request):
     order.save()
     request.session['cart'] = []
     return render(request, "complete_order.html", ctx)
-    
+
+def adminLogin(request):
+    if request.method == "POST":
+        usname = request.POST["username"]
+        pwd = request.POST["password"]
+        user = authenticate(username=usname, password=pwd)
+        if user is not None:
+                login(request, user)
+                return redirect("admin")
+        else:
+            return render(request, "admin_login.html", {'login': False})
+
+
+    return render(request, "admin_login.html",None)
+
+
+def adminDashboard(request):
+    orders = Order.objects.all()
+    ctx = {'orders': orders}
+    return render(request, "admin_panel.html", ctx)
+
