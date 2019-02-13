@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Product
+from .models import Product, Order
+from django.contrib.auth import authenticate, login
 # Create your views here.
 
 def cartItems(cart):
